@@ -1,7 +1,15 @@
-import React from 'react';
+import { useClient } from 'next/client';
+import React, {useState} from 'react';
 
+const Header = ({ onSearchChange }) => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-const Header = () => {
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    onSearchChange(value);
+  }
+
   return (
     <header className="bg-primary py-4 flex justify-between items-center">
       <div className="ml-4">
@@ -11,6 +19,8 @@ const Header = () => {
         <input
           type="text"
           placeholder="Search..."
+          value={searchTerm}
+          onChange={handleSearchChange}
           className="w-full md:w-3/5 px-4 py-2 rounded-lg bg-secondary text-black placeholder-gray-400 focus:outline-none focus:ring focus:ring-black"
         />
       </div>

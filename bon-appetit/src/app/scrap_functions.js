@@ -67,8 +67,6 @@ async function generarRespuesta(reseñas) {
   
   
   
-  
-  
   async function obtenerYGenerarRespuesta() {
     try {
       reviews = await obtainReviews()
@@ -81,4 +79,42 @@ async function generarRespuesta(reseñas) {
     }
   }
 
+  async function obtainRate() {
+    const browser = await puppeteer.launch({
+      headless : true,
+      args: ['--incognito',
+            `--ignore-certificate-errors`,
+             `--no-sandbox`,
+            `--disable-setuid-sandbox`,]
+    });
+    const pages = await browser.pages();
+    const page = pages[0];
+    const pageUrl = `https://www.google.com/maps/place/Mister+Wings/@3.4045776,-76.5989681,11z/data=!4m12!1m2!2m1!1smister+wings+cali+rese%C3%B1as!3m8!1s0x8e30a174db9022d1:0x98dd9d23dd9d5394!8m2!3d3.3673381!4d-76.5272447!9m1!1b1!15sChptaXN0ZXIgd2luZ3MgY2FsaSByZXNlw7FhcyIFOAGIAQFaHCIabWlzdGVyIHdpbmdzIGNhbGkgcmVzZcOxYXOSAQpyZXN0YXVyYW504AEA!16s%2Fg%2F11c46568_k?entry=ttu`
+    await page.setExtraHTTPHeaders({ 'x-devtools-emulate-network-conditions-client-id': '1' });
+    await page.setUserAgent(randomUseragent.getRandom().toString());
+    await page.goto(pageUrl, { waitUntil: 'domcontentloaded' });
   
+    
+    
+    try{
+      await page.waitForSelector('.fontDisplayLarge',{timeout:2000});
+      const data = await page.evaluate(() => {
+      const rate_present = document.querySelector('.fontDisplayLarge');
+      if (rate_present){
+        const rate = Array.from(document.querySelectorAll('.fontDisplayLarge')).map(review => review.innerText); 
+        return rate;
+      }
+      
+    });
+    //console.log(data)
+    console.log(data)
+    return data; // Devuelve las reseñas
+    
+  } catch (error) {
+    console.error('Error:', error);
+    obtainRate()
+  } finally {
+    // Cierra el navegador
+    await browser.close();
+  }
+  }

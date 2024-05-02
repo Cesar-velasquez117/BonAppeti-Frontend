@@ -1,4 +1,3 @@
-import { useClient } from 'next/client';
 import React, {useState} from 'react';
 
 const Header = ({ onSearchChange }) => {

@@ -19,7 +19,7 @@ export default function BrandPage({ searchParams}) {
                 const ratingData = await fetchRating(url);
                 setRating(ratingData); 
             } catch (error) {
-                fetchRatingData();
+                //fetchRatingData();
                 console.error("Error fetching rating:", error);
             }
         };
@@ -41,7 +41,7 @@ export default function BrandPage({ searchParams}) {
 
                 setIsLoading(false);
                 } catch (error) {
-                    fetchReviewsData
+                    //fetchReviewsData();
                     console.error("Error fetching reviews:", error);
                 }
             };

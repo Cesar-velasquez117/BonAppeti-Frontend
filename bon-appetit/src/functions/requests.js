@@ -1,4 +1,3 @@
-//const backendUrl = 'https://bon-appetit-backend.onrender.com';
 const backendUrl = 'http://localhost:3001';
 
 export const fetchRating = async (url) => {
@@ -40,8 +39,8 @@ export const fetchReviews = async (url) => {
     const reviewsText = data[0];
     const foods = data[1];
     const generalOpinion = data[2];
-    console.log(foods);
-    console.log(generalOpinion);
+    //console.log(foods);
+    //console.log(generalOpinion);
 
     //Divide the text in individual lines
     const reviewsLines = reviewsText.split('\n');

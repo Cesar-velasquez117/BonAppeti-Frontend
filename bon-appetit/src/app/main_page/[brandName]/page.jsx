@@ -4,7 +4,7 @@ import TurnBackHeader from "@/components/getBackHeader";
 import { fetchRating, fetchReviews } from "@/functions/requests";
 
 export default function BrandPage({ searchParams}) {
-    const { brandName, logoImage, url } = searchParams;
+    const { brandName, logoImage, types, url } = searchParams;
     const [rating, setRating] = useState(null);
     const [positiveReviews, setPositiveReviews] = useState([]);
     const [negativeReviews, setNegativeReviews] = useState([]);
@@ -63,7 +63,7 @@ export default function BrandPage({ searchParams}) {
                     </div>
                     <div className="w-1/2 rounded-lg bg-neutral p-4">
                       <h1 className="font-crimson-pro font-bold text-xl">{brandName}</h1>
-                      <p className=" font-crimson-pro text-gray-700 mt-2">Description: ...</p>
+                      <p className=" font-crimson-pro text-gray-700 mt-2">Kinds of food: {types}</p>
                       <p className="font-crimson-pro text-gray-700 mt-2">General opinion: {generalOpinion}</p>
                       <p className="font-crimson-pro text-gray-700 mt-2">Rating: {rating} out of 5</p>
                     </div>

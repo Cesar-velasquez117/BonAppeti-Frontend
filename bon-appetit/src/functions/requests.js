@@ -1,3 +1,4 @@
+//const backendUrl = 'https://bon-appetit-backend.onrender.com';
 const backendUrl = 'http://localhost:3001';
 
 export const fetchRating = async (url) => {

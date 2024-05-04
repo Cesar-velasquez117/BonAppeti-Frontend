@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Card = ({ brandName, logoImage, url }) => {
+const Card = ({ brandName, logoImage, types, url }) => {
   return (
     <Link href={{
       pathname: `/main_page/${encodeURIComponent(brandName)}`,
-      query: {brandName, logoImage, url},
+      query: {brandName, logoImage, types, url },
       }} passHref>
       <div className="rounded-lg overflow-hidden shadow-lg">
         <div className="bg-primary p-4 flex justify-between items-center">

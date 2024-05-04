@@ -8,6 +8,9 @@ export default function BrandPage({ searchParams}) {
     const [rating, setRating] = useState(null);
     const [positiveReviews, setPositiveReviews] = useState([]);
     const [negativeReviews, setNegativeReviews] = useState([]);
+    const [generalOpinion, setGeneralOpinion] = useState('');
+    const [goodFoods, setGoodFoods] = useState([]);
+    const [badFoods, setBadFoods] = useState([]);
 
     useEffect(() => {
         const fetchRatingData = async () => {
@@ -20,18 +23,20 @@ export default function BrandPage({ searchParams}) {
             }
         };
         fetchRatingData();
-    }, []);
-
-    useEffect(() => {
         const fetchReviewsData = async () => {
             try {
                 const reviewsData = await fetchReviews(url);
                 console.log(reviewsData);
                 const positiveReviewsData = reviewsData.positiveOpinionsData;
                 const negativeReviewsData = reviewsData.negativeOpinionsData;
-                console.log("Pase de la asignacion" + positiveReviewsData)
+                const goodFoodData = reviewsData.positiveFoodData;
+                const badFoodData = reviewsData.negativeFoodData;
+                const opinionData = reviewsData.generalOpinion;
                 setPositiveReviews(positiveReviewsData);
                 setNegativeReviews(negativeReviewsData);
+                setGoodFoods(goodFoodData);
+                setBadFoods(badFoodData);
+                setGeneralOpinion(opinionData);
 
                 } catch (error) {
                     fetchReviewsData
@@ -39,29 +44,31 @@ export default function BrandPage({ searchParams}) {
                 }
             };
             fetchReviewsData();
-        }, []);
-    
+    }, []);
+
     // useEffect(() => {
-    //     const fetchData = async () => {
-    //       try {
-    //         // Fetch rating
-    //         const ratingData = await fetchRating(url);
-    //         setRating(ratingData);
-    
-    //         // Fetch reviews
-    //         const reviewsData = await fetchReviews(url);
-    //         const { positiveReviewsData, negativeReviewsData } = reviewsData;
-    
-    //         // Set positive and negative opinions
-    //         setPositiveReviews(positiveReviewsData);
-    //         setNegativeReviews(negativeReviewsData);
-    //       } catch (error) {
-    //         console.error("Error fetching data:", error);
-    //       }
-    //     };
-    
-    //     fetchData();
-    //   }, []);
+    //     const fetchReviewsData = async () => {
+    //         try {
+    //             const reviewsData = await fetchReviews(url);
+    //             console.log(reviewsData);
+    //             const positiveReviewsData = reviewsData.positiveOpinionsData;
+    //             const negativeReviewsData = reviewsData.negativeOpinionsData;
+    //             const goodFoodData = reviewsData.positiveFoodData;
+    //             const badFoodData = reviewsData.negativeFoodData;
+    //             const opinionData = reviewsData.generalOpinion;
+    //             setPositiveReviews(positiveReviewsData);
+    //             setNegativeReviews(negativeReviewsData);
+    //             setGoodFoods(goodFoodData);
+    //             setBadFoods(badFoodData);
+    //             setGeneralOpinion(opinionData);
+
+    //             } catch (error) {
+    //                 fetchReviewsData
+    //                 console.error("Error fetching reviews:", error);
+    //             }
+    //         };
+    //         fetchReviewsData();
+    //     }, []);
 
     return (
         <div>
@@ -73,11 +80,12 @@ export default function BrandPage({ searchParams}) {
                 <div className="w-1/2 rounded-lg bg-neutral p-4">
                     <h1 className="font-crimson-pro font-bold text-xl">{brandName}</h1>
                     <p className=" font-crimson-pro text-gray-700 mt-2">Description: ...</p>
-                    <p className="font-crimson-pro text-gray-700 mt-2">General opinion: ...</p>
+                    <p className="font-crimson-pro text-gray-700 mt-2">General opinion: {generalOpinion}</p>
                     <p className="font-crimson-pro text-gray-700 mt-2">Rating: {rating} out of 5</p>
                 </div>
             </div>
-            <div className="mt-8 mx-auto w-3/4">
+            <h2 className="font-crimson-pro font-bold text-2xl mt-8 mb-4 text-center">Reviews</h2>
+            <div className="mt-8 mx-auto w-3/4 bg-neutral rounded-lg p-4">
                 <table className="w-full">
                     <thead>
                         <tr>
@@ -100,6 +108,35 @@ export default function BrandPage({ searchParams}) {
                         <tr key={index}>
                             <td className="font-crimson-pro text-gray-700 border-b"></td>
                             <td className="font-crimson-pro text-gray-700 border-b">{negativeReview}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+            <h2 className="font-crimson-pro font-bold text-2xl mt-8 mb-4 text-center">Food Recomendations</h2>
+            <div className="mt-8 mx-auto w-3/4 bg-neutral rounded-lg p-4 mb-8">
+                <table className="w-full">
+                    <thead>
+                        <tr>
+                            <th className="font-crimson-pro text-gray-700 border-b-2">Good Food</th>
+                            <th className="font-crimson-pro text-gray-700 border-b-2">Bad Food</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {/* Generate rows alternating between positive and negative reviews */}
+                    {goodFoods.map((goodFood, index) => (
+                        <tr key={index}>
+                            <td className="font-crimson-pro text-gray-700 border-b">{goodFood}</td>
+                            <td className="font-crimson-pro text-gray-700 border-b">
+                            {badFoods[index] || ""}
+                            </td>
+                        </tr>
+                    ))}
+                    {/* Add adicional rows for negative reviews if necessary */}
+                    {badFoods.slice(goodFoods.length).map((badFood, index) => (
+                        <tr key={index}>
+                            <td className="font-crimson-pro text-gray-700 border-b"></td>
+                            <td className="font-crimson-pro text-gray-700 border-b">{badFood}</td>
                         </tr>
                     ))}
                     </tbody>

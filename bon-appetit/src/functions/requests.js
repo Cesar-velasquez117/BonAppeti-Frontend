@@ -23,7 +23,7 @@ export const fetchRating = async (url) => {
 
 export const fetchReviews = async (url) => {
   try {
-    const response = await fetch(`${backendUrl}/separate_reviews`, {
+    const response = await fetch(`${backendUrl}/bring_info_from_reviews`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +35,12 @@ export const fetchReviews = async (url) => {
       throw new Error('Failed to fetch reviews');
     }
 
-    const reviewsText = await response.text();
+    const data = await response.json()
+    const reviewsText = data[0];
+    const foods = data[1];
+    const generalOpinion = data[2];
+    console.log(foods);
+    console.log(generalOpinion);
 
     //Divide the text in individual lines
     const reviewsLines = reviewsText.split('\n');
@@ -77,10 +82,45 @@ export const fetchReviews = async (url) => {
       }
     });
 
-    console.log('Positive Reviews:', positiveOpinionsData);
-    console.log('Negative Reviews:', negativeOpinionsData);
+    //Divide the text in individual lines
+    const foodsLines = foods.split('\n');
 
-    return { positiveOpinionsData, negativeOpinionsData };
+    //Initialize the arrays 
+    let positiveFoodData = [];
+    let negativeFoodData = [];
+
+    // Iterate over every single line 
+    foodsLines.forEach((line, index) => {
+      // Print current line
+      //console.log(`Line ${index + 1}: ${line}`);
+
+      // Set positive reviews
+      if (line.startsWith('**Comidas consideradas buenas:**') || line.startsWith('**Buenas:**') || line.startsWith('**Buenas comidas:**')) {
+        //console.log('Detected positive reviews');
+        isPositive = true;
+        isNegative = false;
+      }
+      // Set negative reviews
+      else if (line.startsWith('**Comidas consideradas malas:**') || line.startsWith('**Malas:**') || line.startsWith('**Malas comidas:**')) {
+        //console.log('Detected negative reviews');
+        isPositive = false;
+        isNegative = true;
+      }
+      // If set in positive reviews, add review to positive array
+      else if (isPositive && line.trim() !== '') {
+        //console.log('Adding to positive reviews:', line.trim());
+        positiveFoodData.push(line.trim());
+      }
+      // If set in negative reviews, add review to negative array
+      else if (isNegative && line.trim() !== '') {
+        //console.log('Adding to negative reviews:', line.trim());
+        negativeFoodData.push(line.trim());
+      }
+    });
+    //console.log("Recomendamos:" + positiveFoodData)
+    //console.log("No recomendamos:" + negativeFoodData)
+
+    return { positiveOpinionsData, negativeOpinionsData, positiveFoodData, negativeFoodData, generalOpinion };
   } catch (error) {
     throw new Error(`Error fetching reviews: ${error.message}`);
   }

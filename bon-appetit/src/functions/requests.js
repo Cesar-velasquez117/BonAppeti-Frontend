@@ -95,13 +95,13 @@ export const fetchReviews = async (url) => {
       //console.log(`Line ${index + 1}: ${line}`);
 
       // Set positive reviews
-      if (line.startsWith('**Comidas consideradas buenas:**') || line.startsWith('**Buenas:**') || line.startsWith('**Buenas comidas:**')) {
+      if (line.startsWith('**Comidas consideradas buenas:**') || line.startsWith('**Buenas:**') || line.startsWith('**Buenas comidas:**') || line.startsWith('**Comidas buenas:**')) {
         //console.log('Detected positive reviews');
         isPositive = true;
         isNegative = false;
       }
       // Set negative reviews
-      else if (line.startsWith('**Comidas consideradas malas:**') || line.startsWith('**Malas:**') || line.startsWith('**Malas comidas:**')) {
+      else if (line.startsWith('**Comidas consideradas malas:**') || line.startsWith('**Malas:**') || line.startsWith('**Malas comidas:**') || line.startsWith('**Comidas malas:**')) {
         //console.log('Detected negative reviews');
         isPositive = false;
         isNegative = true;
